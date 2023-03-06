@@ -30,14 +30,14 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 
-	"github.com/slok/sloth/internal/alert"
-	"github.com/slok/sloth/internal/app/generate"
-	"github.com/slok/sloth/internal/app/kubecontroller"
-	"github.com/slok/sloth/internal/k8sprometheus"
-	"github.com/slok/sloth/internal/log"
-	"github.com/slok/sloth/internal/prometheus"
-	slothv1 "github.com/slok/sloth/pkg/kubernetes/api/sloth/v1"
-	slothclientset "github.com/slok/sloth/pkg/kubernetes/gen/clientset/versioned"
+	slothv1 "github.com/kloudfuse/sloth/pkg/kubernetes/api/sloth/v1"
+	slothclientset "github.com/kloudfuse/sloth/pkg/kubernetes/gen/clientset/versioned"
+	"github.com/kloudfuse/sloth/src/alert"
+	"github.com/kloudfuse/sloth/src/app/generate"
+	"github.com/kloudfuse/sloth/src/app/kubecontroller"
+	"github.com/kloudfuse/sloth/src/k8sprometheus"
+	"github.com/kloudfuse/sloth/src/log"
+	"github.com/kloudfuse/sloth/src/prometheus"
 )
 
 var controllerModes = []string{controllerModeDefault, controllerModeDryRun, controllerModeFake}

@@ -16,15 +16,15 @@ import (
 	prometheusmodel "github.com/prometheus/common/model"
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"github.com/slok/sloth/internal/alert"
-	"github.com/slok/sloth/internal/app/generate"
-	"github.com/slok/sloth/internal/info"
-	"github.com/slok/sloth/internal/k8sprometheus"
-	"github.com/slok/sloth/internal/log"
-	"github.com/slok/sloth/internal/openslo"
-	"github.com/slok/sloth/internal/prometheus"
-	kubernetesv1 "github.com/slok/sloth/pkg/kubernetes/api/sloth/v1"
-	prometheusv1 "github.com/slok/sloth/pkg/prometheus/api/v1"
+	kubernetesv1 "github.com/kloudfuse/sloth/pkg/kubernetes/api/sloth/v1"
+	prometheusv1 "github.com/kloudfuse/sloth/pkg/prometheus/api/v1"
+	"github.com/kloudfuse/sloth/src/alert"
+	"github.com/kloudfuse/sloth/src/app/generate"
+	"github.com/kloudfuse/sloth/src/info"
+	"github.com/kloudfuse/sloth/src/k8sprometheus"
+	"github.com/kloudfuse/sloth/src/log"
+	"github.com/kloudfuse/sloth/src/openslo"
+	"github.com/kloudfuse/sloth/src/prometheus"
 )
 
 type generateCommand struct {
