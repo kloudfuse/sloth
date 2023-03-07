@@ -126,9 +126,9 @@ func (v validateCommand) Run(ctx context.Context, config RootConfig) error {
 		splittedSLOsData := splitYAML(slxData)
 
 		gen := Generator{
-			logger:      log.Noop,
-			windowsRepo: windowsRepo,
-			extraLabels: v.extraLabels,
+			Logger:      log.Noop,
+			WindowsRepo: windowsRepo,
+			ExtraLabels: v.extraLabels,
 		}
 
 		// Prepare file validation result and start validation result for every SLO in the file.
