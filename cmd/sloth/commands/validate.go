@@ -125,7 +125,7 @@ func (v validateCommand) Run(ctx context.Context, config RootConfig) error {
 		// Split YAMLs in case we have multiple yaml files in a single file.
 		splittedSLOsData := splitYAML(slxData)
 
-		gen := generator{
+		gen := Generator{
 			logger:      log.Noop,
 			windowsRepo: windowsRepo,
 			extraLabels: v.extraLabels,

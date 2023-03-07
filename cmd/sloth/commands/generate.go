@@ -238,7 +238,7 @@ func (g generateCommand) Run(ctx context.Context, config RootConfig) error {
 		}
 	}
 
-	gen := generator{
+	gen := Generator{
 		logger:                logger,
 		windowsRepo:           windowsRepo,
 		disableRecordings:     g.disableRecordings,
@@ -298,7 +298,7 @@ type generateTarget struct {
 	SLOData string
 }
 
-type generator struct {
+type Generator struct {
 	logger                log.Logger
 	windowsRepo           alert.WindowsRepo
 	disableRecordings     bool
@@ -308,7 +308,7 @@ type generator struct {
 }
 
 // GeneratePrometheus generates the SLOs based on a raw regular Prometheus spec format input and outs a Prometheus raw yaml.
-func (g generator) GeneratePrometheus(ctx context.Context, slos prometheus.SLOGroup, out io.Writer) error {
+func (g Generator) GeneratePrometheus(ctx context.Context, slos prometheus.SLOGroup, out io.Writer) error {
 	g.logger.Infof("Generating from Prometheus spec")
 	info := info.Info{
 		Version: info.Version,
@@ -339,7 +339,7 @@ func (g generator) GeneratePrometheus(ctx context.Context, slos prometheus.SLOGr
 }
 
 // generateKubernetes generates the SLOs based on a Kuberentes spec format input and outs a Kubernetes prometheus operator CRD yaml.
-func (g generator) GenerateKubernetes(ctx context.Context, sloGroup k8sprometheus.SLOGroup, out io.Writer) error {
+func (g Generator) GenerateKubernetes(ctx context.Context, sloGroup k8sprometheus.SLOGroup, out io.Writer) error {
 	g.logger.Infof("Generating from Kubernetes Prometheus spec")
 
 	info := info.Info{
@@ -370,7 +370,7 @@ func (g generator) GenerateKubernetes(ctx context.Context, sloGroup k8sprometheu
 }
 
 // generateOpenSLO generates the SLOs based on a OpenSLO spec format input and outs a Prometheus raw yaml.
-func (g generator) GenerateOpenSLO(ctx context.Context, slos prometheus.SLOGroup, out io.Writer) error {
+func (g Generator) GenerateOpenSLO(ctx context.Context, slos prometheus.SLOGroup, out io.Writer) error {
 	g.logger.Infof("Generating from OpenSLO spec")
 	info := info.Info{
 		Version: info.Version,
@@ -401,7 +401,7 @@ func (g generator) GenerateOpenSLO(ctx context.Context, slos prometheus.SLOGroup
 }
 
 // generate is the main generator logic that all the spec types and storers share. Mainly has the logic of the generate app service.
-func (g generator) generateRules(ctx context.Context, info info.Info, slos prometheus.SLOGroup) (*generate.Response, error) {
+func (g Generator) generateRules(ctx context.Context, info info.Info, slos prometheus.SLOGroup) (*generate.Response, error) {
 	// Disable recording rules if required.
 	var sliRuleGen generate.SLIRecordingRulesGenerator = generate.NoopSLIRecordingRulesGenerator
 	var metaRuleGen generate.MetadataRecordingRulesGenerator = generate.NoopMetadataRecordingRulesGenerator
