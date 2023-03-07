@@ -89,7 +89,10 @@ func (i IOWriterGroupedRulesYAMLRepo) StoreSLOs(ctx context.Context, slos []Stor
 	}
 
 	logger := i.logger.WithCtxValues(ctx)
-	logger.WithValues(log.Kv{"groups": len(ruleGroups.Groups)}).Infof("Prometheus rules written")
+	logger.Infof("test 1")
+	i.logger.Infof("test 2")
+	logger.WithValues(log.Kv{"groups": len(ruleGroups.Groups)}).Infof("Prometheus rules written 1")
+	i.logger.WithValues(log.Kv{"groups": len(ruleGroups.Groups)}).Infof("Prometheus rules written 2")
 
 	return nil
 }

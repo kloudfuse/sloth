@@ -324,6 +324,7 @@ func (g Generator) GeneratePrometheus(ctx context.Context, slos prometheus.SLOGr
 	repo := prometheus.NewIOWriterGroupedRulesYAMLRepo(out, g.Logger)
 	storageSLOs := make([]prometheus.StorageSLO, 0, len(result.PrometheusSLOs))
 	for _, s := range result.PrometheusSLOs {
+		g.Logger.Infof(s.SLO.Name)
 		storageSLOs = append(storageSLOs, prometheus.StorageSLO{
 			SLO:   s.SLO,
 			Rules: s.SLORules,
