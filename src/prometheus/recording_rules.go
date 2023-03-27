@@ -261,6 +261,37 @@ func (m metadataRecordingRulesGenerator) GenerateMetadataRecordingRules(ctx cont
 		return nil, fmt.Errorf("could not render period burn rate prometheus metadata recording rule expression: %w", err)
 	}
 
+	sliExprTplFmt := `(%s)`
+	errorQuery := slo.SLI.Events.ErrorQuery
+	totalQuery := slo.SLI.Events.TotalQuery
+
+	sliExprTplError := fmt.Sprintf(sliExprTplFmt, errorQuery)
+	sliExprTplTotal := fmt.Sprintf(sliExprTplFmt, totalQuery)
+
+	tplError, err := template.New("sliExpr").Option("missingkey=error").Parse(sliExprTplError)
+	if err != nil {
+		return nil, fmt.Errorf("could not create SLI expression template data: %w", err)
+	}
+	tplTotal, err := template.New("sliExpr").Option("missingkey=error").Parse(sliExprTplTotal)
+	if err != nil {
+		return nil, fmt.Errorf("could not create SLI expression template data: %w", err)
+	}
+
+	var bError bytes.Buffer
+	err = tplError.Execute(&bError, map[string]string{
+		tplKeyWindow: "1d",
+	})
+	if err != nil {
+		return nil, fmt.Errorf("could not render SLI expression template: %w", err)
+	}
+	var bTotal bytes.Buffer
+	err = tplTotal.Execute(&bTotal, map[string]string{
+		tplKeyWindow: "1d",
+	})
+	if err != nil {
+		return nil, fmt.Errorf("could not render SLI expression template: %w", err)
+	}
+
 	rules := []rulefmt.Rule{
 		// SLO Objective.
 		{
@@ -319,14 +350,14 @@ func (m metadataRecordingRulesGenerator) GenerateMetadataRecordingRules(ctx cont
 		//slo:sli_total_count1d, filter by sloID
 		{
 			Record: sliTotalCount1d,
-			Expr:   slo.SLI.Events.TotalQuery,
+			Expr:   bTotal.String(),
 			Labels: labels,
 		},
 
 		//slo:sli_error_count1d, filter by sloID
 		{
 			Record: sliErrorCount1d,
-			Expr:   slo.SLI.Events.ErrorQuery,
+			Expr:   bError.String(),
 			Labels: labels,
 		},
 	}
