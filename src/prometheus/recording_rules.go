@@ -21,6 +21,11 @@ type sliRecordingRulesGenerator struct {
 	genFunc sliRulesgenFunc
 }
 
+const (
+	sliTotalCount1d = "slo:sli_total_count1d"
+	sliErrorCount1d = "slo:sli_error_count1d"
+)
+
 // OptimizedSLIRecordingRulesGenerator knows how to generate the SLI prometheus recording rules
 // from an SLO optimizing where it can.
 // Normally these rules are used by the SLO alerts.
@@ -106,12 +111,23 @@ func rawSLIRecordGenerator(slo SLO, window time.Duration, alerts alert.MWMBAlert
 }
 
 func eventsSLIRecordGenerator(slo SLO, window time.Duration, alerts alert.MWMBAlertGroup) (*rulefmt.Rule, error) {
-	const sliExprTplFmt = `(%s)
-/
-(%s)
-`
+	var idFilter string
+	sliExprTplFmt := `(%s)/(%s)`
+	errorQuery := slo.SLI.Events.ErrorQuery
+	totalQuery := slo.SLI.Events.TotalQuery
+	strWindow := timeDurationToPromStr(window)
+
 	// Generate our first level of template by assembling the error and total expressions.
-	sliExprTpl := fmt.Sprintf(sliExprTplFmt, slo.SLI.Events.ErrorQuery, slo.SLI.Events.TotalQuery)
+	sliExprTpl := fmt.Sprintf(sliExprTplFmt, errorQuery, totalQuery)
+
+	// If this is 1d, use the 1d recording rules
+	if strWindow == "1d" {
+		sliExprTplFmt = `(%s{%s}[{{.window}}]) / (%s{%s}[{{.window}}])`
+		errorQuery = sliErrorCount1d
+		totalQuery = sliTotalCount1d
+		idFilter = fmt.Sprintf(`sloth_id="%s"`, slo.ID)
+		sliExprTpl = fmt.Sprintf(sliExprTplFmt, sliErrorCount1d, idFilter, sliTotalCount1d, idFilter)
+	}
 
 	// Render with our templated data.
 	tpl, err := template.New("sliExpr").Option("missingkey=error").Parse(sliExprTpl)
@@ -119,7 +135,6 @@ func eventsSLIRecordGenerator(slo SLO, window time.Duration, alerts alert.MWMBAl
 		return nil, fmt.Errorf("could not create SLI expression template data: %w", err)
 	}
 
-	strWindow := timeDurationToPromStr(window)
 	var b bytes.Buffer
 	err = tpl.Execute(&b, map[string]string{
 		tplKeyWindow: strWindow,
@@ -299,6 +314,20 @@ func (m metadataRecordingRulesGenerator) GenerateMetadataRecordingRules(ctx cont
 				sloSpecLabelName:      info.Spec,
 				sloObjectiveLabelName: strconv.FormatFloat(slo.Objective, 'f', -1, 64),
 			}),
+		},
+
+		//slo:sli_total_count1d, filter by sloID
+		{
+			Record: sliTotalCount1d,
+			Expr:   slo.SLI.Events.TotalQuery,
+			Labels: labels,
+		},
+
+		//slo:sli_error_count1d, filter by sloID
+		{
+			Record: sliErrorCount1d,
+			Expr:   slo.SLI.Events.ErrorQuery,
+			Labels: labels,
 		},
 	}
 
