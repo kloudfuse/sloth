@@ -122,7 +122,7 @@ func eventsSLIRecordGenerator(slo SLO, window time.Duration, alerts alert.MWMBAl
 
 	// If this is 1d, use the 1d recording rules
 	if strWindow == "1d" {
-		sliExprTplFmt = `(%s{%s}[{{.window}}]) / (%s{%s}[{{.window}}])`
+		sliExprTplFmt = `(%s{%s}) / (%s{%s})`
 		errorQuery = sliErrorCount1d
 		totalQuery = sliTotalCount1d
 		idFilter = fmt.Sprintf(`sloth_id="%s"`, slo.ID)
