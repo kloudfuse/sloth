@@ -85,17 +85,18 @@ func defaultSLOAlertGenerator(slo SLO, sloAlert AlertMeta, quick, slow alert.MWM
 	}
 
 	// Add specific annotations.
-	severity := quick.Severity.String() // Any(quick or slow) should work because are the same.
 	extraAnnotations := map[string]string{
-		"title":   fmt.Sprintf("(%s) {{$labels.%s}} {{$labels.%s}} SLO error budget burn rate is too fast.", severity, sloServiceLabelName, sloNameLabelName),
-		"summary": fmt.Sprintf("{{$labels.%s}} {{$labels.%s}} SLO error budget burn rate is over expected.", sloServiceLabelName, sloNameLabelName),
+		"summary": "SLO error budget burn rate is over expected.",
 	}
 
 	// Add specific labels. We don't add the labels from the rules because we will
 	// inherit on the alerts, this way we avoid warnings of overrided labels.
-	extraLabels := map[string]string{
-		sloSeverityLabelName: severity,
-	}
+	// severity := quick.Severity.String() // Any(quick or slow) should work because are the same.
+	// extraLabels := map[string]string{
+	//	sloSeverityLabelName: severity,
+	// }
+
+	extraLabels := map[string]string{}
 
 	return &rulefmt.Rule{
 		Alert:       sloAlert.Name,
