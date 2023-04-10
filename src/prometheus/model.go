@@ -33,8 +33,8 @@ type SLIEvents struct {
 type AlertMeta struct {
 	Disable     bool
 	Name        string            `validate:"required_if_enabled"`
-	Labels      map[string]string `validate:"dive,keys,prom_label_key,endkeys,required,prom_label_value"`
-	Annotations map[string]string `validate:"dive,keys,prom_annot_key,endkeys,required"`
+	Labels      map[string]string `validate:"dive,keys,endkeys,required"`
+	Annotations map[string]string `validate:"dive,keys,endkeys,required"`
 }
 
 // SLO represents a service level objective configuration.
@@ -46,7 +46,7 @@ type SLO struct {
 	SLI             SLI               `validate:"required"`
 	TimeWindow      time.Duration     `validate:"required"`
 	Objective       float64           `validate:"gt=0,lte=100"`
-	Labels          map[string]string `validate:"dive,keys,prom_label_key,endkeys,required,prom_label_value"`
+	Labels          map[string]string `validate:"dive,keys,endkeys,required"`
 	PageAlertMeta   AlertMeta
 	TicketAlertMeta AlertMeta
 }
@@ -80,9 +80,6 @@ var modelSpecValidate = func() *validator.Validate {
 
 	// More information on prometheus validators logic: https://github.com/prometheus/prometheus/blob/df80dc4d3970121f2f76cba79050983ffb3cdbb0/pkg/rulefmt/rulefmt.go#L188-L208
 	mustRegisterValidation(v, "prom_expr", validatePromExpression)
-	mustRegisterValidation(v, "prom_label_key", validatePromLabelKey)
-	mustRegisterValidation(v, "prom_label_value", validatePromLabelValue)
-	mustRegisterValidation(v, "prom_annot_key", validatePromAnnotKey)
 	mustRegisterValidation(v, "name", validateName)
 	mustRegisterValidation(v, "required_if_enabled", validateRequiredEnabledAlertName)
 	mustRegisterValidation(v, "template_vars", validateTemplateVars)

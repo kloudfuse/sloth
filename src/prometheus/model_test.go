@@ -289,15 +289,6 @@ func TestModelValidationSpec(t *testing.T) {
 			expErrMessage: "Key: 'SLOGroup.SLOs[0].Objective' Error:Field validation for 'Objective' failed on the 'lte' tag",
 		},
 
-		"SLO Labels should be valid prometheus keys.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].Labels[".something"] = "label key is wrong"
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].Labels[.something]' Error:Field validation for 'Labels[.something]' failed on the 'prom_label_key' tag",
-		},
-
 		"SLO Labels should have prometheus values.": {
 			slo: func() prometheus.SLOGroup {
 				s := getGoodSLOGroup()
@@ -305,15 +296,6 @@ func TestModelValidationSpec(t *testing.T) {
 				return s
 			},
 			expErrMessage: "Key: 'SLOGroup.SLOs[0].Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'required' tag",
-		},
-
-		"SLO Labels should be valid prometheus values.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].Labels["something"] = "\xc3\x28"
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'prom_label_value' tag",
 		},
 
 		"SLO page alert name is required.": {
@@ -356,15 +338,6 @@ func TestModelValidationSpec(t *testing.T) {
 			},
 		},
 
-		"SLO page alert labels should be valid prometheus keys.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].PageAlertMeta.Labels[".something"] = "label key is wrong"
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].PageAlertMeta.Labels[.something]' Error:Field validation for 'Labels[.something]' failed on the 'prom_label_key' tag",
-		},
-
 		"SLO page alert labels should have prometheus values.": {
 			slo: func() prometheus.SLOGroup {
 				s := getGoodSLOGroup()
@@ -372,24 +345,6 @@ func TestModelValidationSpec(t *testing.T) {
 				return s
 			},
 			expErrMessage: "Key: 'SLOGroup.SLOs[0].PageAlertMeta.Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'required' tag",
-		},
-
-		"SLO page alert labels should be valid prometheus values.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].PageAlertMeta.Labels["something"] = "\xc3\x28"
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].PageAlertMeta.Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'prom_label_value' tag",
-		},
-
-		"SLO page alert annotations should be valid prometheus keys.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].PageAlertMeta.Annotations[".something"] = "label key is wrong"
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].PageAlertMeta.Annotations[.something]' Error:Field validation for 'Annotations[.something]' failed on the 'prom_annot_key' tag",
 		},
 
 		"SLO page alert annotations should have prometheus values.": {
@@ -401,15 +356,6 @@ func TestModelValidationSpec(t *testing.T) {
 			expErrMessage: "Key: 'SLOGroup.SLOs[0].PageAlertMeta.Annotations[something]' Error:Field validation for 'Annotations[something]' failed on the 'required' tag",
 		},
 
-		"SLO warning alert labels should be valid prometheus keys.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].TicketAlertMeta.Labels[".something"] = "label key is wrong"
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].TicketAlertMeta.Labels[.something]' Error:Field validation for 'Labels[.something]' failed on the 'prom_label_key' tag",
-		},
-
 		"SLO warning alert labels should have prometheus values.": {
 			slo: func() prometheus.SLOGroup {
 				s := getGoodSLOGroup()
@@ -417,24 +363,6 @@ func TestModelValidationSpec(t *testing.T) {
 				return s
 			},
 			expErrMessage: "Key: 'SLOGroup.SLOs[0].TicketAlertMeta.Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'required' tag",
-		},
-
-		"SLO warning alert labels should be valid prometheus values.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].TicketAlertMeta.Labels["something"] = "\xc3\x28"
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].TicketAlertMeta.Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'prom_label_value' tag",
-		},
-
-		"SLO warning alert annotations should be valid prometheus keys.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].TicketAlertMeta.Annotations[".something"] = "label key is wrong"
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].TicketAlertMeta.Annotations[.something]' Error:Field validation for 'Annotations[.something]' failed on the 'prom_annot_key' tag",
 		},
 
 		"SLO warning alert annotations should have prometheus values.": {
