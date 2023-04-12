@@ -289,15 +289,6 @@ func TestModelValidationSpec(t *testing.T) {
 			expErrMessage: "Key: 'SLOGroup.SLOs[0].Objective' Error:Field validation for 'Objective' failed on the 'lte' tag",
 		},
 
-		"SLO Labels should have prometheus values.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].Labels["something"] = ""
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'required' tag",
-		},
-
 		"SLO page alert name is required.": {
 			slo: func() prometheus.SLOGroup {
 				s := getGoodSLOGroup()
@@ -336,42 +327,6 @@ func TestModelValidationSpec(t *testing.T) {
 				s.SLOs[0].TicketAlertMeta.Annotations = map[string]string{}
 				return s
 			},
-		},
-
-		"SLO page alert labels should have prometheus values.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].PageAlertMeta.Labels["something"] = ""
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].PageAlertMeta.Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'required' tag",
-		},
-
-		"SLO page alert annotations should have prometheus values.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].PageAlertMeta.Annotations["something"] = ""
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].PageAlertMeta.Annotations[something]' Error:Field validation for 'Annotations[something]' failed on the 'required' tag",
-		},
-
-		"SLO warning alert labels should have prometheus values.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].TicketAlertMeta.Labels["something"] = ""
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].TicketAlertMeta.Labels[something]' Error:Field validation for 'Labels[something]' failed on the 'required' tag",
-		},
-
-		"SLO warning alert annotations should have prometheus values.": {
-			slo: func() prometheus.SLOGroup {
-				s := getGoodSLOGroup()
-				s.SLOs[0].TicketAlertMeta.Annotations["something"] = ""
-				return s
-			},
-			expErrMessage: "Key: 'SLOGroup.SLOs[0].TicketAlertMeta.Annotations[something]' Error:Field validation for 'Annotations[something]' failed on the 'required' tag",
 		},
 	}
 

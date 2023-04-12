@@ -33,8 +33,8 @@ type SLIEvents struct {
 type AlertMeta struct {
 	Disable     bool
 	Name        string            `validate:"required_if_enabled"`
-	Labels      map[string]string `validate:"dive,keys,endkeys,required"`
-	Annotations map[string]string `validate:"dive,keys,endkeys,required"`
+	Labels      map[string]string `validate:"dive,keys,endkeys"`
+	Annotations map[string]string `validate:"dive,keys,endkeys"`
 }
 
 // SLO represents a service level objective configuration.
@@ -46,7 +46,7 @@ type SLO struct {
 	SLI             SLI               `validate:"required"`
 	TimeWindow      time.Duration     `validate:"required"`
 	Objective       float64           `validate:"gt=0,lte=100"`
-	Labels          map[string]string `validate:"dive,keys,endkeys,required"`
+	Labels          map[string]string `validate:"dive,keys,endkeys"`
 	PageAlertMeta   AlertMeta
 	TicketAlertMeta AlertMeta
 }
