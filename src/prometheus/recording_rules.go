@@ -38,7 +38,10 @@ var SLIRecordingRulesGenerator = sliRecordingRulesGenerator{genFunc: factorySLIR
 
 func optimizedFactorySLIRecordGenerator(slo SLO, window time.Duration, alerts alert.MWMBAlertGroup) (*rulefmt.Rule, error) {
 	// Optimize the rules that are for the total period time window.
-	if window == slo.TimeWindow {
+	sixHours := time.Duration(6 * time.Hour)
+
+	// Any windows that are greater than or equal to 6h will use the shor window (5m by default)
+	if window >= sixHours {
 		return optimizedSLIRecordGenerator(slo, window, alerts.PageQuick.ShortWindow)
 	}
 
